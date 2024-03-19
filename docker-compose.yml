@@ -1,0 +1,32 @@
+version: "3.0"
+
+services:
+  orders:
+    container_name: app
+    image: reminder:1.0.0
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm start
+    restart: always
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    container_name: postgres
+    image: bitnami/postgresql:16.1.0
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRESQL_USER=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=reminder
+  redis:
+    container_name: redis
+    image: bitnami/redis:7.2.4
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=redis
